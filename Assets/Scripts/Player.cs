@@ -9,10 +9,12 @@ public class Player : MonoBehaviour
 {
     private Scene currentScene;
     public float speed = 3.5f;
+    [SerializeField]
+    public float _ThrusterBoost = 2f;
     public bool isPlayerOne = false;
     public bool isPlayerTwo = false;
     // Start is called before the first frame update
-    
+
     Animator anim;
     [SerializeField]
     private GameObject _laserPrefab;
@@ -41,7 +43,7 @@ public class Player : MonoBehaviour
     private AudioClip LazerAudio;
 
     SpawnManager _spawnManager;
-    
+
     UIManager _uiManager;
 
     // var for tripple shot active
@@ -53,7 +55,7 @@ public class Player : MonoBehaviour
     //8.5 
     [SerializeField]
     private float _BoostSpeed = 8.5f;
-     private bool _IsSpeedBoostActive = false;
+    private bool _IsSpeedBoostActive = false;
     [SerializeField]
     private float _SpeedBoostCoolDown = 5f;
 
@@ -61,7 +63,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     bool _IsShieldActive = false;
     [SerializeField]
-    private int _score =0;
+    private int _score = 0;
 
 
     void Start()
@@ -70,7 +72,7 @@ public class Player : MonoBehaviour
         if (!SceneIsCoOp(currentScene))
         {
             transform.position = new Vector3(0, 0, 0);
-           
+
         }
         else
         {
@@ -118,7 +120,7 @@ public class Player : MonoBehaviour
 
     private bool SceneIsCoOp(Scene currentScene)
     {
-       if (currentScene.buildIndex== 2)
+        if (currentScene.buildIndex == 2)
         {
             return true;
         }
@@ -129,7 +131,7 @@ public class Player : MonoBehaviour
     void Update()
     {
 
-        if ( this.isPlayerOne)
+        if (this.isPlayerOne)
         {
             CalculateMovement1();
         }
@@ -146,11 +148,11 @@ public class Player : MonoBehaviour
         }
 
 #else
-        if ((Input.GetKeyDown(KeyCode.Space) && this.isPlayerOne )|| (Input.GetMouseButtonDown(0) && Time.time > _canFire && this.isPlayerOne))
+        if ((Input.GetKeyDown(KeyCode.Space) && this.isPlayerOne) || (Input.GetMouseButtonDown(0) && Time.time > _canFire && this.isPlayerOne))
         {
             FireLazer();
         }
-        else if (Input.GetKeyDown(KeyCode.KeypadEnter) && ( Time.time > _canFire && this.isPlayerTwo))
+        else if (Input.GetKeyDown(KeyCode.KeypadEnter) && (Time.time > _canFire && this.isPlayerTwo))
         {
             FireLazer();
         }
@@ -185,7 +187,7 @@ public class Player : MonoBehaviour
 
         anim.SetFloat("Strafe", horizontalInput);
 
-        
+
 
 
     }
@@ -193,7 +195,7 @@ public class Player : MonoBehaviour
     private void CalculateMovement2()
     {
         float horizontalInput = Input.GetAxis("Horizontal2");
-        float verticalInput =  Input.GetAxis("Vertical2");
+        float verticalInput = Input.GetAxis("Vertical2");
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
         CalculateBoost(direction);
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0f), 0f);
@@ -204,6 +206,15 @@ public class Player : MonoBehaviour
 
     private void CalculateBoost(Vector3 _dir)
     {
+        // Check to see if should be thrusting
+
+        if (Input.GetKey(KeyCode.LeftShift) && !_IsSpeedBoostActive)
+        {
+            transform.Translate(_dir * (_ThrusterBoost + speed) * Time.deltaTime);
+            Debug.Log($"Should be thrusting at {_ThrusterBoost + speed}");
+        }
+
+
         if (_IsSpeedBoostActive)
         {
             transform.Translate(_dir * _BoostSpeed * Time.deltaTime);
@@ -213,6 +224,10 @@ public class Player : MonoBehaviour
         {
             transform.Translate(_dir * speed * Time.deltaTime);
         }
+
+
+
+
     }
 
     private void WrapXMovement()
@@ -255,7 +270,7 @@ public class Player : MonoBehaviour
         {
             Debug.LogWarning("Please assign Lazer Audio Clip");
         }
-       
+
 
     }
 
@@ -274,12 +289,12 @@ public class Player : MonoBehaviour
         {
             _rightEngine.SetActive(true);
         }
-        else if(_lives == 1)
+        else if (_lives == 1)
         {
             _leftEngine.SetActive(true);
         }
-       
-        
+
+
         _uiManager.UpdateLives(_lives);
 
         if (_lives < 1)
@@ -290,9 +305,9 @@ public class Player : MonoBehaviour
             }
             _spawnManager.OnPlayerDeath();
             _uiManager.CheckForBestScore();
-           
 
-             Destroy(this.gameObject);
+
+            Destroy(this.gameObject);
         }
 
     }
@@ -302,7 +317,7 @@ public class Player : MonoBehaviour
         StartCoroutine(TrippleShotPowerdownRoutine());
     }
 
-    public void SpeedBostActive ()
+    public void SpeedBostActive()
     {
         _IsSpeedBoostActive = true;
         StartCoroutine(SpeedBoostPowerDownRoutine());
@@ -311,11 +326,11 @@ public class Player : MonoBehaviour
     public void ShieldActive()
     {
         _IsShieldActive = true;
-        if(_ShieldVisualizer !=null)
-        _ShieldVisualizer.SetActive(true);
+        if (_ShieldVisualizer != null)
+            _ShieldVisualizer.SetActive(true);
     }
 
-   public void Score( int _value)
+    public void Score(int _value)
     {
         _score += _value;
         if (_uiManager != null)
