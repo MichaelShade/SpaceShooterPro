@@ -17,6 +17,10 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
 
     Animator anim;
+
+    [SerializeField]
+    private int _MaxAmmo = 15;
+    private int _CurrAmmo;
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
@@ -81,6 +85,7 @@ public class Player : MonoBehaviour
         if (!SceneIsCoOp(currentScene))
         {
             transform.position = new Vector3(0, 0, 0);
+            _CurrAmmo = 15;
 
         }
         else
@@ -159,7 +164,7 @@ public class Player : MonoBehaviour
         }
 
 #else
-        if ((Input.GetKeyDown(KeyCode.Space) && this.isPlayerOne) || (Input.GetMouseButtonDown(0) && Time.time > _canFire && this.isPlayerOne))
+        if ((Input.GetKeyDown(KeyCode.Space) && this.isPlayerOne) || (Input.GetMouseButtonDown(0) && Time.time > _canFire && this.isPlayerOne && _CurrAmmo > 0))
         {
             FireLazer();
         }
@@ -173,7 +178,7 @@ public class Player : MonoBehaviour
 
 
 
-        if (Input.GetKeyDown(KeyCode.Space) && this.isPlayerOne || Input.GetMouseButtonDown(0) && Time.time > _canFire && this.isPlayerOne)
+        if (Input.GetKeyDown(KeyCode.Space) && this.isPlayerOne || Input.GetMouseButtonDown(0) && Time.time > _canFire && this.isPlayerOne && _CurrAmmo > 0)
         {
             FireLazer();
         }
@@ -276,6 +281,8 @@ public class Player : MonoBehaviour
         if (LazerAudio != null)
         {
             _aSource.PlayOneShot(LazerAudio);
+            _CurrAmmo--;
+            _uiManager.UpdateAmmoCountText(_CurrAmmo);
         }
         else
         {

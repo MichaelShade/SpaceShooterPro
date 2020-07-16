@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -27,11 +27,14 @@ public class UIManager : MonoBehaviour
     private GameObject PauseMenu;
     private int _currentscore;
     private int _BestScore;
+    [SerializeField]
+    private Text _ammoText;
 
    // Start is called before the first frame update
     void Start()
     {
         _scoreText.text = "Score: 0";
+        _ammoText.text = $"Ammo : 15";
         SetBestScoreText();
         _gameOverText.gameObject.SetActive(false);
         _restartText.gameObject.SetActive(false);
@@ -127,5 +130,8 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene(0); // main menu
     }
 
-   
+    public void UpdateAmmoCountText(int currAmmo)
+    {
+        _ammoText.text = $"Ammo: {currAmmo}";
+    }
 }
