@@ -35,6 +35,7 @@ public class Player : MonoBehaviour
     private Color SheieldDamagedColor1;
     [SerializeField]
     private Color SheieldDamagedColor2;
+    private SpriteRenderer SheieldRend;
 
     [SerializeField]
     private GameObject _explosionPrefab;
@@ -88,6 +89,7 @@ public class Player : MonoBehaviour
         }
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+       
         if (_spawnManager == null)
         {
             Debug.LogError("The Spawn Manager is null");
@@ -104,6 +106,7 @@ public class Player : MonoBehaviour
         else
         {
             _ShieldVisualizer.SetActive(false);
+            SheieldRend = _ShieldVisualizer.GetComponent<SpriteRenderer>();
         }
 
         if (_leftEngine == null || _rightEngine == null)
@@ -294,12 +297,14 @@ public class Player : MonoBehaviour
                         CurrentSheildStr--;
                         Debug.Log($"Sheilds Took Damage! Sheilds now at {CurrentSheildStr}");
                         // Change color to purple
+                        SheieldRend.color = SheieldDamagedColor1;
                         break;
 
                     case 2:
                         CurrentSheildStr--;
                         Debug.Log($"Sheilds Took Damage! Sheilds now at {CurrentSheildStr}");
                         // change color to red and maybe flash?
+                        SheieldRend.color = SheieldDamagedColor2;
                         break;
 
                     default:
@@ -314,8 +319,9 @@ public class Player : MonoBehaviour
                 _IsShieldActive = false;
                 if (_ShieldVisualizer != null)
                     _ShieldVisualizer.SetActive(false);
-                //Reset Hits
+                //Reset Hits and collor
                 CurrentSheildStr = NumShieldHits;
+                SheieldRend.color = Color.white;
                 return;
             }
 
