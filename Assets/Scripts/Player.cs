@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public float _ThrusterBoost = 2f;
     public bool isPlayerOne = false;
     public bool isPlayerTwo = false;
+  
     // Start is called before the first frame update
 
     Animator anim;
@@ -27,6 +28,13 @@ public class Player : MonoBehaviour
     private int _lives = 3;
     [SerializeField]
     private GameObject _ShieldVisualizer;
+    [SerializeField]
+    private int NumShieldHits = 3;
+    private int CurrentSheildStr = 3;
+    [SerializeField]
+    private Color SheieldDamagedColor1;
+    [SerializeField]
+    private Color SheieldDamagedColor2;
 
     [SerializeField]
     private GameObject _explosionPrefab;
@@ -211,7 +219,7 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift) && !_IsSpeedBoostActive)
         {
             transform.Translate(_dir * (_ThrusterBoost + speed) * Time.deltaTime);
-            Debug.Log($"Should be thrusting at {_ThrusterBoost + speed}");
+           
         }
 
 
@@ -278,10 +286,40 @@ public class Player : MonoBehaviour
     {
         if (_IsShieldActive)
         {
-            _IsShieldActive = false;
-            if (_ShieldVisualizer != null)
-                _ShieldVisualizer.SetActive(false);
-            return;
+            if (CurrentSheildStr > 1)
+            {
+                switch (CurrentSheildStr)
+                {
+                    case 3:
+                        CurrentSheildStr--;
+                        Debug.Log($"Sheilds Took Damage! Sheilds now at {CurrentSheildStr}");
+                        // Change color to purple
+                        break;
+
+                    case 2:
+                        CurrentSheildStr--;
+                        Debug.Log($"Sheilds Took Damage! Sheilds now at {CurrentSheildStr}");
+                        // change color to red and maybe flash?
+                        break;
+
+                    default:
+                        break;
+                }
+                return;
+            }
+            // Allow for 3 hits and change collor of the sheild 
+            else
+            {
+                Debug.Log("Sheilds Gone!");
+                _IsShieldActive = false;
+                if (_ShieldVisualizer != null)
+                    _ShieldVisualizer.SetActive(false);
+                //Reset Hits
+                CurrentSheildStr = NumShieldHits;
+                return;
+            }
+
+           
         }
         _lives--;
         // if lives is 2 enable right engine
