@@ -1728,7 +1728,7 @@ MonoBehaviour:
   _ShieldVisualizer: {fileID: 1341324140}
   NumShieldHits: 3
   SheieldDamagedColor1: {r: 1, g: 0, b: 0.5700908, a: 1}
-  SheieldDamagedColor2: {r: 0.9811321, g: 0.06941971, b: 0.06941971, a: 1}
+  SheieldDamagedColor2: {r: 0.98039216, g: 0.22684489, b: 0.0705882, a: 1}
   _explosionPrefab: {fileID: 3942328941199696535, guid: c147af7acda768d4b963885e9aa863ee,
     type: 3}
   _rightEngine: {fileID: 484063593}
