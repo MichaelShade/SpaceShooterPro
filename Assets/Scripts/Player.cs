@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     public float _ThrusterBoost = 2f;
     public bool isPlayerOne = false;
     public bool isPlayerTwo = false;
-  
+
     // Start is called before the first frame update
 
     Animator anim;
@@ -89,7 +89,7 @@ public class Player : MonoBehaviour
         }
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
-       
+
         if (_spawnManager == null)
         {
             Debug.LogError("The Spawn Manager is null");
@@ -222,7 +222,7 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift) && !_IsSpeedBoostActive)
         {
             transform.Translate(_dir * (_ThrusterBoost + speed) * Time.deltaTime);
-           
+
         }
 
 
@@ -287,45 +287,26 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+
+
+
         if (_IsShieldActive)
         {
             if (CurrentSheildStr > 1)
             {
-                switch (CurrentSheildStr)
-                {
-                    case 3:
-                        CurrentSheildStr--;
-                        Debug.Log($"Sheilds Took Damage! Sheilds now at {CurrentSheildStr}");
-                        // Change color to purple
-                        SheieldRend.color = SheieldDamagedColor1;
-                        break;
+                ShieldCtl();
 
-                    case 2:
-                        CurrentSheildStr--;
-                        Debug.Log($"Sheilds Took Damage! Sheilds now at {CurrentSheildStr}");
-                        // change color to red and maybe flash?
-                        SheieldRend.color = SheieldDamagedColor2;
-                        break;
-
-                    default:
-                        break;
-                }
                 return;
             }
-            // Allow for 3 hits and change collor of the sheild 
+
             else
             {
-                Debug.Log("Sheilds Gone!");
-                _IsShieldActive = false;
-                if (_ShieldVisualizer != null)
-                    _ShieldVisualizer.SetActive(false);
-                //Reset Hits and collor
-                CurrentSheildStr = NumShieldHits;
-                SheieldRend.color = Color.white;
+                ResetShields();
+
                 return;
             }
 
-           
+
         }
         _lives--;
         // if lives is 2 enable right engine
@@ -355,6 +336,41 @@ public class Player : MonoBehaviour
         }
 
     }
+
+    private void ResetShields()
+    {
+        _IsShieldActive = false;
+        if (_ShieldVisualizer != null)
+        {
+
+            _ShieldVisualizer.SetActive(false);
+            SheieldRend.color = Color.white;
+
+        }
+
+        CurrentSheildStr = NumShieldHits;
+    }
+
+    private void ShieldCtl()
+    {
+        switch (CurrentSheildStr)
+        {
+            case 3:
+                CurrentSheildStr--;
+                SheieldRend.color = SheieldDamagedColor1;
+                break;
+
+            case 2:
+                CurrentSheildStr--;
+                SheieldRend.color = SheieldDamagedColor2;
+
+                break;
+
+            default:
+                break;
+        }
+    }
+
     public void TrippleShotActive()
     {
         _isTrippleShotActive = true;
@@ -397,6 +413,7 @@ public class Player : MonoBehaviour
         _IsSpeedBoostActive = false;
     }
 
-    // method to add 10 to score
-    //update score in UI
+
+
+
 }
