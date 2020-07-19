@@ -13,7 +13,7 @@ public class Powerup : MonoBehaviour
     int AmmoToAdd = 0;
   
     [SerializeField]
-    private int powerupID;   // Id for powerups 0 = tripple shot 1 = speed 2 = shileds 3 = Ammo
+    private int powerupID;   // Id for powerups 0 = tripple shot 1 = speed 2 = shileds 3 = Ammo 4 = Health
 
     
 
@@ -57,6 +57,9 @@ public class Powerup : MonoBehaviour
                         break;
                     case 3:
                         playerScript.AddAmmo(AmmoToAdd);
+                        break;
+                    case 4:
+                        playerScript.AddLife();
                         break;
                     default:
                         Debug.Log("Default VAlue");

@@ -30,6 +30,7 @@ public class Player : MonoBehaviour
     private float _canFire = -1f;
     [SerializeField]
     private int _lives = 3;
+    private int _MaxLives = 3;
     [SerializeField]
     private GameObject _ShieldVisualizer;
     [SerializeField]
@@ -61,6 +62,8 @@ public class Player : MonoBehaviour
     SpawnManager _spawnManager;
 
     UIManager _uiManager;
+
+   
 
     // var for tripple shot active
     private bool _isTrippleShotActive = false;
@@ -409,6 +412,27 @@ public class Player : MonoBehaviour
                 _CurrAmmo = _MaxAmmo;
         }
         _uiManager.UpdateAmmoCountText(_CurrAmmo);
+    }
+
+    public void AddLife()
+    {
+        _lives++;
+
+        if (_lives > _MaxLives)
+            _lives = _MaxLives;
+        // update UI
+        _uiManager.UpdateLives(_lives);
+
+        if (_lives == 3)
+        {
+            _rightEngine.SetActive(false);
+            _leftEngine.SetActive(false);
+        }
+        else if (_lives == 2)
+        {
+            _rightEngine.SetActive(true);
+            _leftEngine.SetActive(false);
+        }
     }
 
     public void Score(int _value)
