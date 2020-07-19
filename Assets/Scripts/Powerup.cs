@@ -8,9 +8,12 @@ public class Powerup : MonoBehaviour
     [SerializeField]
     float _speed = 4f;
     Vector3 _dir = Vector3.down;
+
+    [SerializeField]
+    int AmmoToAdd = 0;
   
     [SerializeField]
-    private int powerupID;   // Id for powerups 0 = tripple shot 1 = speed 2 = shileds
+    private int powerupID;   // Id for powerups 0 = tripple shot 1 = speed 2 = shileds 3 = Ammo
 
     
 
@@ -51,6 +54,9 @@ public class Powerup : MonoBehaviour
                         break;
                     case 2:
                         playerScript.ShieldActive();
+                        break;
+                    case 3:
+                        playerScript.AddAmmo(AmmoToAdd);
                         break;
                     default:
                         Debug.Log("Default VAlue");

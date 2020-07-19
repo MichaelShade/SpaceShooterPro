@@ -52,6 +52,9 @@ public class Player : MonoBehaviour
 
     // Var for audio clip
     private AudioSource _aSource;
+
+    
+
     [SerializeField]
     private AudioClip LazerAudio;
 
@@ -395,6 +398,17 @@ public class Player : MonoBehaviour
         _IsShieldActive = true;
         if (_ShieldVisualizer != null)
             _ShieldVisualizer.SetActive(true);
+    }
+
+    public void AddAmmo(int ammoToAdd)
+    {
+       if (_CurrAmmo < _MaxAmmo)
+        {
+            _CurrAmmo += ammoToAdd;
+            if (_CurrAmmo > _MaxAmmo)
+                _CurrAmmo = _MaxAmmo;
+        }
+        _uiManager.UpdateAmmoCountText(_CurrAmmo);
     }
 
     public void Score(int _value)
