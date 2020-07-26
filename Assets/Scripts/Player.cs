@@ -26,6 +26,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _trippleShotPrefab;
     [SerializeField]
+    private GameObject _clusterBombPrefab;
+    [SerializeField]
     private float _fireRate = 0.5f;
     private float _canFire = -1f;
     [SerializeField]
@@ -69,6 +71,12 @@ public class Player : MonoBehaviour
     private bool _isTrippleShotActive = false;
     [SerializeField]
     private float _trippleShotCoolDown = 5f;
+
+    //var for cluster bomb
+    [SerializeField]
+    private bool _IsClusterBombActive = false;
+    [SerializeField] 
+    private float _ClusterBombCoolDown = 5f;
 
     // var for speed boost 
     //8.5 
@@ -270,11 +278,20 @@ public class Player : MonoBehaviour
     void FireLazer()
     {
 
+
+        // Check for special Cluster bomb
+
         _canFire = Time.time + _fireRate;
 
         if (_isTrippleShotActive)
         {
             Instantiate(_trippleShotPrefab, transform.position, Quaternion.identity);
+        }
+
+        if (_IsClusterBombActive)
+        {
+            Vector3 offset = new Vector3(0, 1.13f, 0);
+            Instantiate(_clusterBombPrefab, transform.position + offset, Quaternion.identity);
         }
         else
         {

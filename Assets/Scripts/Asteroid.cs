@@ -35,7 +35,7 @@ public class Asteroid : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D _other)
     {
-        if (_other.gameObject.tag == "Lazer")
+        if (_other.gameObject.tag == "Lazer" || _other.gameObject.tag == "ClusterBomb")
         {
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             Destroy(_other.gameObject);
@@ -43,5 +43,6 @@ public class Asteroid : MonoBehaviour
             Destroy(this.gameObject ,0.25f);
             
         }
+        
     }
 }

@@ -115,6 +115,19 @@ public class Enemy : MonoBehaviour
 
            
         }
+
+        if (other.gameObject.tag == "ClusterBomb")
+        {
+            Destroy(other.gameObject);
+            _player.Score(10);
+
+            //trigger Anim
+            _anim.SetTrigger("OnEnemyDeath");
+            _speed = 0;
+            _audioSource.Play();
+            Destroy(GetComponent<Collider2D>());
+            Destroy(this.gameObject, 2.8f);
+        }
         
         
     }
