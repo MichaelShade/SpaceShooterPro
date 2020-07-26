@@ -37,6 +37,11 @@ public class ClusterBomb : MonoBehaviour
         _pos += transform.up * Time.deltaTime * _BombSpeed;
         transform.position = _pos + _axis * Mathf.Sin(Time.time * frequency) * magnitude;
 
+        if (gameObject.transform.position.y >= 8)
+        {
+            Destroy(this.gameObject);
+        }
+
 
     }
 
