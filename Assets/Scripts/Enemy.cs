@@ -118,7 +118,7 @@ public class Enemy : MonoBehaviour
 
         if (other.gameObject.tag == "ClusterBomb")
         {
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
             _player.Score(10);
 
             //trigger Anim

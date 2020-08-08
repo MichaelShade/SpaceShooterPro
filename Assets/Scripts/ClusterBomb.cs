@@ -3,47 +3,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClusterBomb : MonoBehaviour
+public class ClusterBomb : ClusterBombSecondary
 {
 
+  
     [SerializeField]
-    float _BombSpeed = 6f;
+    private Transform RightBombSpawnPoint;
+    [SerializeField]
+    private Transform LeftBombSpawnPoint;
 
-    private Vector3 _axis;
-    private Vector3 _pos;
-
     [SerializeField]
-    private float frequency = 20f; //Speed of sine Movement
+    private GameObject LeftBomb;
     [SerializeField]
-    private float magnitude = 0.5f; // Size of sine Movement
+    private GameObject RighBomb;
 
 
 
     // Start is called before the first frame update
-    void Awake()
+    private void Start()
     {
-        _pos = transform.position;
-        _axis = transform.right;
+        if (RighBomb == null)
+        {
+            Debug.LogError("Please Assign RightBomb");
+        }
+        if (LeftBomb == null)
+        {
+            Debug.LogError("Please Assign RightBomb");
+        }
     }
+  
 
     // Update is called once per frame
     void Update()
     {
-        SineMovement();
+        base.SineMovement();
     }
 
-    private void SineMovement()
-    {
-        _pos += transform.up * Time.deltaTime * _BombSpeed;
-        transform.position = _pos + _axis * Mathf.Sin(Time.time * frequency) * magnitude;
+  
 
-        if (gameObject.transform.position.y >= 8)
+    public void OnTriggerEnter2D(Collider2D _other)
+    {
+        if (_other.gameObject.tag == "Enemy")
         {
+            // instantiate bombs
+            Instantiate(RighBomb, RightBombSpawnPoint.transform.position, RighBomb.transform.rotation);
+            Instantiate(LeftBomb, LeftBombSpawnPoint.transform.position, LeftBomb.transform.rotation);
             Destroy(this.gameObject);
         }
-
-
     }
-
-    // Will need an ontrigger enter to make a cluster boom boom
 }
