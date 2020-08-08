@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Lazer
+  - ClusterBomb
   layers:
   - Default
   - TransparentFX
