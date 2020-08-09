@@ -51,7 +51,7 @@ public class SpawnManager : MonoBehaviour
              float RandomSpawnTime = UnityEngine.Random.Range(3f, 6f);
           
             float randomX = UnityEngine.Random.Range(-9.46f, 9.3f);
-            int randomPowerUp = UnityEngine.Random.Range(0, 5);
+            int randomPowerUp = UnityEngine.Random.Range(0, 6);
             Instantiate(_Poweups[randomPowerUp], new Vector3(randomX, 7f, 0f), Quaternion.identity);
             yield return new WaitForSeconds(RandomSpawnTime);
         }

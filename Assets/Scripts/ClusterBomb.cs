@@ -45,10 +45,24 @@ public class ClusterBomb : ClusterBombSecondary
     {
         if (_other.gameObject.tag == "Enemy")
         {
+
+            var render = GetComponent<SpriteRenderer>();
+            if (render != null)
+            {
+                render.enabled = false;
+            }
             // instantiate bombs
-            Instantiate(RighBomb, RightBombSpawnPoint.transform.position, RighBomb.transform.rotation);
-            Instantiate(LeftBomb, LeftBombSpawnPoint.transform.position, LeftBomb.transform.rotation);
-            Destroy(this.gameObject);
+            StartCoroutine(SpawnBombRoutine(_other.transform));
+          
         }
+    }
+
+    IEnumerator SpawnBombRoutine(Transform enemypos)
+    {
+        yield return new WaitForSeconds(.2f);
+        Instantiate(RighBomb, enemypos.position, RighBomb.transform.rotation);
+        Instantiate(LeftBomb, enemypos.position, LeftBomb.transform.rotation);
+        Destroy(this.gameObject);
+
     }
 }

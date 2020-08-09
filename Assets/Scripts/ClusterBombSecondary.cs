@@ -40,6 +40,10 @@ public class ClusterBombSecondary : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+        if (gameObject.transform.position.x >=11 || gameObject.transform.position.x <= -11)
+        {
+            Destroy(this.gameObject);
+        }
 
 
     }

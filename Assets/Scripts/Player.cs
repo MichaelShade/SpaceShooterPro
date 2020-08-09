@@ -69,6 +69,9 @@ public class Player : MonoBehaviour
 
     // var for tripple shot active
     private bool _isTrippleShotActive = false;
+
+   
+
     [SerializeField]
     private float _trippleShotCoolDown = 5f;
 
@@ -403,6 +406,7 @@ public class Player : MonoBehaviour
 
     public void TrippleShotActive()
     {
+        ClearSpecialAmmo();
         _isTrippleShotActive = true;
         StartCoroutine(TrippleShotPowerdownRoutine());
     }
@@ -452,6 +456,13 @@ public class Player : MonoBehaviour
         }
     }
 
+    internal void ClusterBombActive()
+    {
+        ClearSpecialAmmo();
+        _IsClusterBombActive = true;
+        StartCoroutine(ClusterBombPowerDownRoutine());
+    }
+
     public void Score(int _value)
     {
         _score += _value;
@@ -475,6 +486,17 @@ public class Player : MonoBehaviour
         _IsSpeedBoostActive = false;
     }
 
+    IEnumerator ClusterBombPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(_ClusterBombCoolDown);
+        _IsClusterBombActive = false;
+    }
+
+    private void ClearSpecialAmmo()
+    {
+        _isTrippleShotActive = false;
+        _IsClusterBombActive = false;
+    }
 
 
 
