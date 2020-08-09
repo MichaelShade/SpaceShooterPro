@@ -43,16 +43,29 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnPowerupRoutine()
     {
+        int ClusterBomb = 10;
+
         yield return new WaitForSeconds(3.5f);
 
         while (_stopSpwaning == false)
         {
             
-             float RandomSpawnTime = UnityEngine.Random.Range(3f, 6f);
-          
+            // Need to figure out how to make the cluster bomb rare 
+            
+            float RandomSpawnTime = UnityEngine.Random.Range(3f, 6f);
             float randomX = UnityEngine.Random.Range(-9.46f, 9.3f);
-            int randomPowerUp = UnityEngine.Random.Range(0, 6);
-            Instantiate(_Poweups[randomPowerUp], new Vector3(randomX, 7f, 0f), Quaternion.identity);
+            if (Random.Range(1,11) == ClusterBomb)
+            {
+                Instantiate(_Poweups[5], new Vector3(randomX, 7f, 0f), Quaternion.identity);
+
+            }
+            else
+            {
+                int randomPowerUp = UnityEngine.Random.Range(0, 5);
+                Instantiate(_Poweups[randomPowerUp], new Vector3(randomX, 7f, 0f), Quaternion.identity);
+            }
+          
+           
             yield return new WaitForSeconds(RandomSpawnTime);
         }
        
