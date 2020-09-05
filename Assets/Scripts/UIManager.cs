@@ -29,6 +29,8 @@ public class UIManager : MonoBehaviour
     private int _BestScore;
     [SerializeField]
     private Text _ammoText;
+    [SerializeField]
+    private Slider ThrustSlider;
 
    // Start is called before the first frame update
     void Start()
@@ -133,5 +135,12 @@ public class UIManager : MonoBehaviour
     public void UpdateAmmoCountText(int currAmmo)
     {
         _ammoText.text = $"Ammo: {currAmmo}";
+    }
+
+    public void UpdateThrustSlider(int value, int maxBoostPower)
+    {
+        float ThrusterScalingBarHUD =(float) value / (float) maxBoostPower;
+        
+        ThrustSlider.value = ThrusterScalingBarHUD;
     }
 }

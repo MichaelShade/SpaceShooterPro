@@ -33,6 +33,12 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _lives = 3;
     private int _MaxLives = 3;
+   
+    private int _boostPower = 100;
+    [SerializeField]
+    private int MaxBoostPower = 1000;
+    [SerializeField]
+    private int _bostRate = 5;
     [SerializeField]
     private GameObject _ShieldVisualizer;
     [SerializeField]
@@ -149,6 +155,8 @@ public class Player : MonoBehaviour
 
         anim = GetComponent<Animator>();
 
+        _boostPower = MaxBoostPower;
+
     }
 
     private bool SceneIsCoOp(Scene currentScene)
@@ -243,7 +251,18 @@ public class Player : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift) && !_IsSpeedBoostActive)
         {
-            transform.Translate(_dir * (_ThrusterBoost + speed) * Time.deltaTime);
+            if (_boostPower > 0)
+            {
+                transform.Translate(_dir * (_ThrusterBoost + speed) * Time.deltaTime);
+                _boostPower = _boostPower - _bostRate;
+                _uiManager.UpdateThrustSlider(_boostPower, MaxBoostPower);
+            }
+            else
+            {
+                Debug.Log("No Boost for you!");
+            }
+           
+
 
         }
 
