@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
+using System.Linq;
 
 public class UIManager : MonoBehaviour
 {
@@ -32,6 +33,11 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Slider ThrustSlider;
 
+    [SerializeField]
+    private Color[] ThrustColors;
+   
+    private Image ThrustFill; 
+
    // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +51,14 @@ public class UIManager : MonoBehaviour
         if (_gameManager == null)
         {
             Debug.LogError("GameManager Is null");
+        }
+
+        ThrustFill = ThrustSlider.GetComponentsInChildren<UnityEngine.UI.Image>()
+            .FirstOrDefault(t => t.name == "Fill");
+
+        if(ThrustFill == null)
+        {
+            Debug.LogError("Could not get slider fill");
         }
     }
 
@@ -142,5 +156,26 @@ public class UIManager : MonoBehaviour
         float ThrusterScalingBarHUD =(float) value / (float) maxBoostPower;
         
         ThrustSlider.value = ThrusterScalingBarHUD;
+    }
+
+    public void ThrustSliderOnValueChanged()
+    {
+
+       
+        if (ThrustSlider.value > 0.50f)
+        {
+            ThrustFill.color = ThrustColors[0];
+           
+        }
+        if (ThrustSlider.value <= 0.50f && ThrustSlider.value > 0.20f)
+        {
+            ThrustFill.color = ThrustColors[1];
+            Debug.Log($"{ThrustSlider.value} should be Yellow");
+        }
+        if (ThrustSlider.value <= 0.10f)
+        {
+           
+            ThrustFill.color = ThrustColors[2];
+        }
     }
 }

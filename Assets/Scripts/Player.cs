@@ -33,12 +33,13 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _lives = 3;
     private int _MaxLives = 3;
-   
+    [SerializeField]
     private int _boostPower = 100;
     [SerializeField]
     private int MaxBoostPower = 1000;
     [SerializeField]
     private int _bostRate = 5;
+    private bool _CanBoost = true;
     [SerializeField]
     private GameObject _ShieldVisualizer;
     [SerializeField]
@@ -251,7 +252,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift) && !_IsSpeedBoostActive)
         {
-            if (_boostPower > 0)
+            if (_boostPower > 0 && _CanBoost)
             {
                 transform.Translate(_dir * (_ThrusterBoost + speed) * Time.deltaTime);
                 _boostPower = _boostPower - _bostRate;
@@ -259,11 +260,16 @@ public class Player : MonoBehaviour
             }
             else
             {
-                Debug.Log("No Boost for you!");
+               
+                _CanBoost = false;
+               
+               
             }
-           
-
-
+            
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift) && !_CanBoost && _boostPower == 0)
+        {
+            StartCoroutine(ThrustCoolDownRoutine());
         }
 
 
@@ -509,6 +515,19 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(_ClusterBombCoolDown);
         _IsClusterBombActive = false;
+    }
+
+    IEnumerator ThrustCoolDownRoutine()
+    {
+        while (_boostPower < MaxBoostPower)
+        {
+           yield return new WaitForEndOfFrame();
+            _boostPower = _boostPower + _bostRate;
+            _uiManager.UpdateThrustSlider(_boostPower, MaxBoostPower);
+        }
+        // just in case we go over for some reason
+        _boostPower = MaxBoostPower;
+        _CanBoost = true;
     }
 
     private void ClearSpecialAmmo()
