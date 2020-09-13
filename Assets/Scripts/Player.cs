@@ -102,6 +102,26 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _score = 0;
 
+    private float shakeSeed;
+    [SerializeField]
+    Vector3 MaxTranslationalShake = Vector3.one * 0.5f;
+
+    [SerializeField]
+    float _cameraRecoverySpeed = 1.5f;
+
+    [SerializeField]
+    float shakeMagnitude = 20;
+
+    private float trauma = 0;
+    [SerializeField]
+    float traumaExponent = 2;
+
+    private bool _ShouldShake = false;
+
+    private void Awake()
+    {
+        shakeSeed = UnityEngine.Random.value;
+    }
 
     void Start()
     {
@@ -345,7 +365,9 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        _ShouldShake = true;
 
+        StartCoroutine(CameraShake());
 
 
         if (_IsShieldActive)
@@ -530,11 +552,60 @@ public class Player : MonoBehaviour
         _CanBoost = true;
     }
 
+    IEnumerator CameraShake()
+    {
+        // get amount of time to jiggle
+        // float duration = .5f;
+        //float elapsed = 0.0f;
+        trauma = 1;
+
+        
+        float shake = Mathf.Pow(trauma, traumaExponent);
+        // Get orginal pos of main camera
+        Vector3 originalCamPos = Camera.main.transform.position;
+
+        while(_ShouldShake)
+        {
+            //elapsed += Time.deltaTime;
+
+            //float PercentComplete = elapsed / duration;
+            //float damper = 1.0f - Mathf.Clamp(4.0f * PercentComplete - 3.0f, 0.0f, 1.0f);
+
+            ////map the value to [-1, 1 ]
+            //float x = UnityEngine.Random.value * 2.0f - 1.0f;
+            //float y = UnityEngine.Random.value * 2.0f - 1.0f;
+            //x *= shakeMagnitude * damper;
+            //y *= shakeMagnitude * damper;
+
+            //Shake the cam
+            // Camera.main.transform.localPosition = new Vector3(Mathf.PerlinNoise(0, Time.time *shakeMagnitude) * 2 - 1, 0, 0)* 0.5f;
+            Camera.main.transform.localPosition = new Vector3(
+                MaxTranslationalShake.x * Mathf.PerlinNoise(shakeSeed, Time.time*shakeMagnitude)*2 -1,
+                MaxTranslationalShake.y * Mathf.PerlinNoise(shakeSeed +1, Time.time * shakeMagnitude) * 2-1,
+                //MaxTranslationalShake.z * Mathf.PerlinNoise(shakeSeed +2, Time.time* shakeMagnitude) * 2-1 
+                0f
+
+                ) * shake;
+
+            // if trauma was zero we are done shaking
+            if (trauma == 0)
+                _ShouldShake = false;
+
+            trauma = Mathf.Clamp01(trauma - _cameraRecoverySpeed * Time.deltaTime);
+
+            yield return null;
+        }
+
+       
+    }
+
     private void ClearSpecialAmmo()
     {
         _isTrippleShotActive = false;
         _IsClusterBombActive = false;
     }
+
+
 
 
 
