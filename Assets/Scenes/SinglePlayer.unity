@@ -1949,7 +1949,7 @@ MonoBehaviour:
     type: 3}
   _fireRate: 0.15
   _lives: 3
-  _boostPower: 100
+  _boostPower: 50
   MaxBoostPower: 1000
   _bostRate: 5
   _ShieldVisualizer: {fileID: 1341324140}
