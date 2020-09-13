@@ -552,39 +552,30 @@ public class Player : MonoBehaviour
         _CanBoost = true;
     }
 
+    /// <summary>
+    /// NOTE About why this works without reseting the main cams pos
+    /// Since the Main Cam is in an empty obj we can assume it's local pos is (0,0,0)
+    /// as the trauma value is gradualy set back to 0 the cam will move back into place
+    /// i'm not sure how this solution would work with cm virtual cams without a parrent.... but it works for this project
+    /// </summary>
+    /// <returns></returns>
     IEnumerator CameraShake()
     {
-        // get amount of time to jiggle
-        // float duration = .5f;
-        //float elapsed = 0.0f;
+       
         trauma = 1;
 
         
         float shake = Mathf.Pow(trauma, traumaExponent);
-        // Get orginal pos of main camera
-        Vector3 originalCamPos = Camera.main.transform.position;
-
+       
         while(_ShouldShake)
         {
-            //elapsed += Time.deltaTime;
-
-            //float PercentComplete = elapsed / duration;
-            //float damper = 1.0f - Mathf.Clamp(4.0f * PercentComplete - 3.0f, 0.0f, 1.0f);
-
-            ////map the value to [-1, 1 ]
-            //float x = UnityEngine.Random.value * 2.0f - 1.0f;
-            //float y = UnityEngine.Random.value * 2.0f - 1.0f;
-            //x *= shakeMagnitude * damper;
-            //y *= shakeMagnitude * damper;
-
+          
             //Shake the cam
-            // Camera.main.transform.localPosition = new Vector3(Mathf.PerlinNoise(0, Time.time *shakeMagnitude) * 2 - 1, 0, 0)* 0.5f;
+          
             Camera.main.transform.localPosition = new Vector3(
                 MaxTranslationalShake.x * Mathf.PerlinNoise(shakeSeed, Time.time*shakeMagnitude)*2 -1,
                 MaxTranslationalShake.y * Mathf.PerlinNoise(shakeSeed +1, Time.time * shakeMagnitude) * 2-1,
-                //MaxTranslationalShake.z * Mathf.PerlinNoise(shakeSeed +2, Time.time* shakeMagnitude) * 2-1 
-                0f
-
+                0f // no z movement needed for 2d
                 ) * shake;
 
             // if trauma was zero we are done shaking
